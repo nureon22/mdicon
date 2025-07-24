@@ -1,0 +1,24 @@
+{
+  "name": "mdicon",
+  "version": "0.1.0",
+  "description": "Use material design svg icons more easily",
+  "keywords": [
+    "material",
+    "icon",
+    "svg"
+  ],
+  "license": "MIT",
+  "author": "Phyo Wai Lin",
+  "type": "module",
+  "main": "dist/main.js",
+  "types": "types/main.d.ts",
+  "scripts": {
+    "build:esbuild": "esbuild src/main.ts --bundle --sourcemap=external --sources-content --outfile=dist/main.js",
+    "build:types": "npx tsc",
+    "build": "npm run build:esbuild && npm run build:types"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.8",
+    "typescript": "^5.8.3"
+  }
+}
