@@ -29,7 +29,7 @@ export async function getIconData(icon: {
     opts = opts == "default" ? "fill1" : opts + "fill1";
   }
 
-  const cacheName = `${name}:${Number(filled)}`;
+  const cacheName = `${name}:${opts}`;
   const cachedValue = iconLocalCache.get(cacheName);
 
   if (cachedValue) {
