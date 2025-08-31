@@ -74,7 +74,7 @@ export default class MDIcon extends HTMLElement {
     }
   }
 
-  static observedAttributes = ["icon", "filled", "size"];
+  static observedAttributes = ["icon", "filled", "weight", "family", "size"];
 }
 
 if (typeof window === "object") {
