@@ -21,7 +21,7 @@ export async function getIconData(icon: {
 
   let opts = "default";
 
-  if (weight) {
+  if (weight != 400) {
     opts = "wght" + weight;
   }
 
