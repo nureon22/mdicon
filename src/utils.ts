@@ -2,10 +2,33 @@ import { LocalCache } from "./localcache";
 
 const iconLocalCache = new LocalCache("mdicon");
 
-export async function getIconData(
-  name: string,
-  filled: boolean,
-): Promise<{ viewBox: string; path: string } | null> {
+export async function getIconData(icon: {
+  name: string;
+  family: "outlined" | "rounded" | "sharp" | string;
+  filled: boolean;
+  weight?: 100 | 200 | 300 | 400 | 500 | 600 | 700 | number;
+}): Promise<{ viewBox: string; path: string } | null> {
+  let { name, family, filled, weight } = icon;
+
+  if (family != "outlined" && family != "rounded" && family != "sharp") {
+    family = "outlined";
+  }
+
+  if (weight) {
+    weight = Math.round(weight / 100) * 100;
+    weight = Math.min(Math.max(100, weight), 700);
+  }
+
+  let opts = "default";
+
+  if (weight) {
+    opts = "wght" + weight;
+  }
+
+  if (filled) {
+    opts = opts == "default" ? "fill1" : opts + "fill1";
+  }
+
   const cacheName = `${name}:${Number(filled)}`;
   const cachedValue = iconLocalCache.get(cacheName);
 
@@ -18,7 +41,7 @@ export async function getIconData(
   }
 
   const host = "https://fonts.gstatic.com/s/i/short-term/release";
-  const src = `${host}/materialsymbolsoutlined/${name}/${filled ? "fill1" : "default"}/24px.svg`;
+  const src = `${host}/materialsymbols${family}/${name}/${opts}/24px.svg`;
 
   return fetch(src).then(async (response) => {
     if (response.ok && response.status == 200) {

@@ -20,7 +20,9 @@ export default class MDIcon extends HTMLElement {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     switch (name) {
       case "icon":
+      case "family":
       case "filled":
+      case "weight":
         if (!this.isFirstMount) {
           this.refreshIcon();
         }
@@ -29,7 +31,6 @@ export default class MDIcon extends HTMLElement {
         this.setIconSize(Number(newValue || "24"));
         break;
     }
-    console.log("attributeChangedCallback");
   }
 
   setIconSize(size: number) {
@@ -40,13 +41,13 @@ export default class MDIcon extends HTMLElement {
   }
 
   async refreshIcon() {
-    const icon = this.getAttribute("icon");
-    const filled =
-      this.getAttribute("filled") == "" ||
-      this.getAttribute("filled") == "true";
+    const name = this.getAttribute("icon");
+    const family = this.getAttribute("family") || "outlined";
+    const weight = Number(this.getAttribute("weight") || "400");
+    const filled = this.hasAttribute("filled");
 
-    if (icon) {
-      const iconData = await getIconData(icon, filled);
+    if (name) {
+      const iconData = await getIconData({ name, family, weight, filled });
 
       if (iconData) {
         this.innerHTML = `
@@ -65,9 +66,11 @@ export default class MDIcon extends HTMLElement {
   }
 
   /** preload a list of icons to use them later */
-  static preloadIcons(icons: { icon: string; filled: boolean }[]) {
+  static preloadIcons(
+    icons: { name: string; filled: boolean; family: string; weight: number }[],
+  ) {
     for (const icon of icons) {
-      getIconData(icon.icon, icon.filled);
+      getIconData(icon);
     }
   }
 
